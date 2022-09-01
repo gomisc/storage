@@ -1,0 +1,96 @@
+package factory
+
+import (
+	"context"
+	"net/url"
+	"strings"
+	"sync"
+
+	"git.corout.in/golibs/errors"
+
+	"git.corout.in/golibs/storage"
+	"git.corout.in/golibs/storage/pg"
+)
+
+const (
+	errUnsupportedDriver = errors.Const("unsupported database driver")
+	errDatabaseName      = errors.Const("database name not found in dsn")
+)
+
+type driversFactory struct {
+	ctx context.Context
+
+	sync.RWMutex
+	drivers map[string]storage.Storage
+}
+
+// New конструктор фабрики драйверов баз данных
+func New(ctx context.Context) storage.Factory {
+	return &driversFactory{
+		ctx:     ctx,
+		drivers: make(map[string]storage.Storage),
+	}
+}
+
+// Storage - возвращает расширение интерфейса клиента базы данных
+func (f *driversFactory) Storage(dsn string) (storage.Storage, error) {
+	if driver, ok := f.get(dsn); ok {
+		return driver, nil
+	}
+
+	driver, err := f.create(dsn)
+	if err != nil {
+		return nil, errors.Ctx().
+			Str("dsn", dsn).
+			Wrap(err, "create client connection")
+	}
+
+	return driver, nil
+}
+
+func (f *driversFactory) get(dsn string) (storage.Storage, bool) {
+	f.RLock()
+
+	defer f.RUnlock()
+
+	if driver, ok := f.drivers[dsn]; ok {
+		return driver, ok
+	}
+
+	return nil, false
+}
+
+func (f *driversFactory) create(dsn string) (storage.Storage, error) {
+	errCtx := errors.Ctx().Str("dsn", dsn)
+
+	uri, err := url.Parse(dsn)
+	if err != nil {
+		return nil, errCtx.Wrap(err, "parse dsn")
+	}
+
+	parts := strings.Split(uri.Path, "/")
+	if len(parts) == 0 {
+		return nil, errors.Ctx().Stringer("uri", uri).Just(errDatabaseName)
+	}
+
+	var driver storage.Storage
+
+	switch uri.Scheme {
+	case pg.DefaultScheme, pg.PsqlScheme, pg.ShortScheme:
+		uri.Scheme = pg.DefaultScheme
+
+		driver, err = pg.New(f.ctx, uri.String())
+		if err != nil {
+			return nil, errCtx.Wrap(err, "create postgres connection")
+		}
+	default:
+		return nil, errUnsupportedDriver
+	}
+
+	f.Lock()
+	defer f.Unlock()
+
+	f.drivers[dsn] = driver
+
+	return driver, nil
+}
