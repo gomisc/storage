@@ -28,11 +28,9 @@ const (
 
 var _ storage.Storage = (*databaseClient)(nil)
 
-type (
-	databaseClient struct {
-		pool *pgxpool.Pool
-	}
-)
+type databaseClient struct {
+	pool *pgxpool.Pool
+}
 
 func New(ctx context.Context, dsn string) (storage.Storage, error) {
 	errCtx := errors.Ctx().Str("dsn", dsn)

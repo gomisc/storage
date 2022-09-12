@@ -33,7 +33,7 @@ type (
 		// Err - возвращает ошибку итератора, если такая имела место
 		Err() error
 		// Decode приводит значение текущего элемента итерации к указанному типу
-		Decode(result interface{}) error
+		Decode(result ...any) error
 	}
 
 	Storage interface {
