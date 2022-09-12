@@ -34,7 +34,7 @@ func (tx *pgTransaction) Rollback(ctx context.Context) error {
 	return nil
 }
 
-func getPgTxOptions(in ...interface{}) *pgx.TxOptions {
+func getPgTxOptions(in ...any) *pgx.TxOptions {
 	if len(in) == 0 {
 		return nil
 	}

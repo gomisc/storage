@@ -87,11 +87,11 @@ func (cli *databaseClient) Begin(ctx context.Context, options ...any) (tx storag
 }
 
 // Query - выполняет запрос производящий действия в базе, с возможностью вернуть произвольный результат
-func (cli *databaseClient) Query(ctx context.Context, query storage.Query, result any) error {
+func (cli *databaseClient) Query(ctx context.Context, query storage.Query, result ...any) error {
 	span := tracing.SetTrace(ctx)
 	defer span.End()
 
-	if result == nil {
+	if len(result) == 0 {
 		if _, err := cli.exec(span.Context(), query); err != nil {
 			span, err = span.WithError(err)
 
@@ -108,7 +108,7 @@ func (cli *databaseClient) Query(ctx context.Context, query storage.Query, resul
 		return err
 	}
 
-	if err = row.Scan(&result); err != nil {
+	if err = row.Scan(result...); err != nil {
 		span, err = span.WithError(err, "decode query result")
 
 		return err

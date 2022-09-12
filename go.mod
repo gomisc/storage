@@ -5,6 +5,7 @@ go 1.19
 require (
 	git.corout.in/golibs/errors v1.1.19
 	git.corout.in/golibs/tracing v1.0.3
+	github.com/georgysavva/scany v1.2.0
 	github.com/jackc/pgconn v1.13.0
 	github.com/jackc/pgtype v1.12.0
 	github.com/jackc/pgx/v4 v4.17.1

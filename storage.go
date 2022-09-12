@@ -40,7 +40,7 @@ type (
 		// Begin Стартует и возвращает новую транзакцию
 		Begin(ctx context.Context, opts ...any) (transaction Transaction, err error)
 		// Query - выполняет запрос производящий действия в базе, с возможностью вернуть произвольный результат
-		Query(ctx context.Context, query Query, result any) error
+		Query(ctx context.Context, query Query, result ...any) error
 		// Iterate возвращает итератор по результату запроса
 		Iterate(ctx context.Context, query Query) (Iterator, error)
 		// Exec Выполняет запрос который ничего не возвращает
