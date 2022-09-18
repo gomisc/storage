@@ -107,6 +107,10 @@ func (cli *databaseClient) Query(ctx context.Context, query storage.Query, resul
 	}
 
 	if err = row.Scan(result...); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return storage.ErrEmptyResult
+		}
+
 		span, err = span.WithError(err, "decode query result")
 
 		return err
