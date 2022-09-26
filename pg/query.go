@@ -2,6 +2,7 @@ package pg
 
 import (
 	"context"
+	"database/sql"
 
 	"git.corout.in/golibs/errors"
 	"github.com/jackc/pgconn"
@@ -21,7 +22,7 @@ func (cli *databaseClient) prepare(query storage.Query) (*pgQuery, error) {
 		return nil, errors.Ctx().Stringer("query", query).Just(errWrongQueryType)
 	}
 
-	params, ok := query.Params().([]interface{})
+	params, ok := query.Params().([]any)
 	if !ok {
 		return nil, errors.Ctx().Any("params", query.Params()).Just(errWrongParameters)
 	}
@@ -29,19 +30,21 @@ func (cli *databaseClient) prepare(query storage.Query) (*pgQuery, error) {
 	return &pgQuery{sql: sql, params: params}, nil
 }
 
-func (cli *databaseClient) exec(ctx context.Context, query storage.Query) (string, error) {
+func (cli *databaseClient) exec(ctx context.Context, query storage.Query) (sql.Result, error) {
 	pq, err := cli.prepare(query)
 	if err != nil {
-		return "", errors.Wrap(err, "prepare query data")
+		return nil, errors.Wrap(err, "prepare query data")
 	}
 
-	var tag pgconn.CommandTag
+	var (
+		tag pgconn.CommandTag
+	)
 
 	if tag, err = cli.getExecutor(ctx).Exec(ctx, pq.sql, pq.params...); err != nil {
-		return "", wrapPgErr(err, "execute query")
+		return nil, wrapPgErr(err, "execute query")
 	}
 
-	return string(tag), nil
+	return &execResult{tag: tag}, nil
 }
 
 func (cli *databaseClient) queryRow(ctx context.Context, query storage.Query) (pgx.Row, error) {

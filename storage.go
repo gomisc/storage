@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"io"
 )
@@ -33,18 +34,19 @@ type (
 		// Err - возвращает ошибку итератора, если такая имела место
 		Err() error
 		// Decode приводит значение текущего элемента итерации к указанному типу
-		Decode(result ...any) error
+		Decode(result any) error
 	}
 
 	Storage interface {
+		io.Closer
 		// Begin Стартует и возвращает новую транзакцию
 		Begin(ctx context.Context, opts ...any) (transaction Transaction, err error)
+		// Exec Выполняет запрос который ничего не возвращает
+		Exec(ctx context.Context, query Query) (sql.Result, error)
 		// Query - выполняет запрос производящий действия в базе, с возможностью вернуть произвольный результат
-		Query(ctx context.Context, query Query, result ...any) error
+		Query(ctx context.Context, query Query, result any) error
 		// Iterate возвращает итератор по результату запроса
 		Iterate(ctx context.Context, query Query) (Iterator, error)
-		// Exec Выполняет запрос который ничего не возвращает
-		Exec(ctx context.Context, query Query) (string, error)
 	}
 
 	// Factory - абстрактная фабрика клиентов

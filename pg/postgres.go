@@ -2,6 +2,7 @@ package pg
 
 import (
 	"context"
+	"database/sql"
 
 	"git.corout.in/golibs/errors"
 	"github.com/jackc/pgconn"
@@ -28,9 +29,16 @@ const (
 
 var _ storage.Storage = (*databaseClient)(nil)
 
-type databaseClient struct {
-	pool *pgxpool.Pool
-}
+type (
+	execResult struct {
+		tag pgconn.CommandTag
+		err error
+	}
+
+	databaseClient struct {
+		pool *pgxpool.Pool
+	}
+)
 
 func New(ctx context.Context, dsn string) (storage.Storage, error) {
 	errCtx := errors.Ctx().Str("dsn", dsn)
@@ -85,34 +93,50 @@ func (cli *databaseClient) Begin(ctx context.Context, options ...any) (tx storag
 }
 
 // Query - выполняет запрос производящий действия в базе, с возможностью вернуть произвольный результат
-func (cli *databaseClient) Query(ctx context.Context, query storage.Query, result ...any) error {
+func (cli *databaseClient) Query(ctx context.Context, query storage.Query, result any) (err error) {
 	span := tracing.SetTrace(ctx)
 	defer span.End()
 
-	if len(result) == 0 {
-		if _, err := cli.exec(span.Context(), query); err != nil {
+	if result == nil {
+		if _, err = cli.exec(span.Context(), query); err != nil {
 			span, err = span.WithError(err)
-
 			return err
 		}
 
 		return nil
 	}
 
-	row, err := cli.queryRow(span.Context(), query)
-	if err != nil {
-		span, err = span.WithError(err, "execute query")
+	var rows pgx.Rows
 
+	if rows, err = cli.query(ctx, query); err != nil {
+		span, err = span.WithError(err)
 		return err
 	}
 
-	if err = row.Scan(result...); err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return storage.ErrEmptyResult
+	scanner := newScanner(rows)
+
+	if res, ok := result.(*storage.Result); ok {
+		if err = scanner.scanStorageResult(res); err != nil {
+			span, err = span.WithError(err, "decode query result")
+			return err
 		}
 
-		span, err = span.WithError(err, "decode query result")
+		result = res
+		return nil
+	}
 
+	if res, ok := result.(*storage.Table); ok {
+		if err = scanner.scanStorageTable(res); err != nil {
+			span, err = span.WithError(err, "decode query result")
+			return err
+		}
+
+		result = res
+		return nil
+	}
+
+	if err = scanner.scan(result); err != nil {
+		span, err = span.WithError(err, "decode query result")
 		return err
 	}
 
@@ -131,11 +155,11 @@ func (cli *databaseClient) Iterate(ctx context.Context, query storage.Query) (st
 		return nil, err
 	}
 
-	return &postgresIterator{rows: rows}, nil
+	return newIterator(rows), nil
 }
 
 // Exec Выполняет запрос который ничего не возвращает
-func (cli *databaseClient) Exec(ctx context.Context, query storage.Query) (string, error) {
+func (cli *databaseClient) Exec(ctx context.Context, query storage.Query) (sql.Result, error) {
 	span := tracing.SetTrace(ctx)
 	defer span.End()
 
@@ -155,6 +179,14 @@ func (cli *databaseClient) getExecutor(ctx context.Context) pgxtype.Querier {
 	}
 
 	return cli.pool
+}
+
+func (res *execResult) LastInsertId() (int64, error) {
+	return res.tag.RowsAffected(), res.err
+}
+
+func (res *execResult) RowsAffected() (int64, error) {
+	return res.tag.RowsAffected(), res.err
 }
 
 func wrapPgErr(err error, message string) error {
