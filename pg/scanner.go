@@ -25,6 +25,10 @@ func (cs *customScanner) scan(result any) error {
 
 	if val.Type().Elem().Kind() == reflect.Slice {
 		if err := pgxscan.ScanAll(result, cs.rows); err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				return storage.ErrEmptyResult
+			}
+
 			return errors.Wrap(err, "scan to slice")
 		}
 
@@ -32,6 +36,10 @@ func (cs *customScanner) scan(result any) error {
 	}
 
 	if err := pgxscan.ScanOne(result, cs.rows); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return storage.ErrEmptyResult
+		}
+
 		return errors.Wrap(err, "scan to object")
 	}
 
