@@ -3,7 +3,7 @@ package pg
 import (
 	"context"
 
-	"git.corout.in/golibs/errors"
+	"git.eth4.dev/golibs/errors"
 	"github.com/jackc/pgx/v4"
 )
 

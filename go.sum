@@ -1,10 +1,10 @@
-git.corout.in/golibs/errors v1.1.19 h1:7lxoaBAi7rIcKs24r0SY9T1x/pRRPEnpGNWiVzEFn64=
-git.corout.in/golibs/errors v1.1.19/go.mod h1:1G1lyVB1l2bf9X2CvQf//WfOIcQ/KwcE2Bd8VXOGaNY=
-git.corout.in/golibs/fields v1.0.6 h1:qobLeHsVzxhsUH+cBc8JEtz/B9M691HSLy0J9pUJXHA=
-git.corout.in/golibs/fields v1.0.6/go.mod h1:SfKMdRc3L2vprkZQ7/eTK5tuKrQ+w7O2Fh6r3ZQjmP8=
-git.corout.in/golibs/slog v1.0.9 h1:tol+rBAMb0d4hbjuroRb99qJE4Nr44RiTBjJKsWnwuo=
-git.corout.in/golibs/tracing v1.0.3 h1:CzvGOI3zSCsBJZDzA8gbm/DabTQP3ayiV0yisduNd4U=
-git.corout.in/golibs/tracing v1.0.3/go.mod h1:/waDsRmDppMQ29sQuNW1gNYjut7lzLJM1IlypgXlR/8=
+git.eth4.dev/golibs/errors v1.1.19 h1:7lxoaBAi7rIcKs24r0SY9T1x/pRRPEnpGNWiVzEFn64=
+git.eth4.dev/golibs/errors v1.1.19/go.mod h1:1G1lyVB1l2bf9X2CvQf//WfOIcQ/KwcE2Bd8VXOGaNY=
+git.eth4.dev/golibs/fields v1.0.6 h1:qobLeHsVzxhsUH+cBc8JEtz/B9M691HSLy0J9pUJXHA=
+git.eth4.dev/golibs/fields v1.0.6/go.mod h1:SfKMdRc3L2vprkZQ7/eTK5tuKrQ+w7O2Fh6r3ZQjmP8=
+git.eth4.dev/golibs/slog v1.0.9 h1:tol+rBAMb0d4hbjuroRb99qJE4Nr44RiTBjJKsWnwuo=
+git.eth4.dev/golibs/tracing v1.0.3 h1:CzvGOI3zSCsBJZDzA8gbm/DabTQP3ayiV0yisduNd4U=
+git.eth4.dev/golibs/tracing v1.0.3/go.mod h1:/waDsRmDppMQ29sQuNW1gNYjut7lzLJM1IlypgXlR/8=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
 github.com/benbjohnson/clock v1.3.0 h1:ip6w0uFQkncKQ979AypyG0ER7mqUSBdKLOgAle/AT8A=

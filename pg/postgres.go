@@ -4,15 +4,15 @@ import (
 	"context"
 	"database/sql"
 
-	"git.corout.in/golibs/errors"
+	"git.eth4.dev/golibs/errors"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgtype/pgxtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 
-	"git.corout.in/golibs/tracing"
+	"git.eth4.dev/golibs/tracing"
 
-	"git.corout.in/golibs/storage"
+	"git.eth4.dev/golibs/storage"
 )
 
 // DSN schemes

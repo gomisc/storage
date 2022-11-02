@@ -4,11 +4,11 @@ import (
 	"context"
 	"database/sql"
 
-	"git.corout.in/golibs/errors"
+	"git.eth4.dev/golibs/errors"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
 
-	"git.corout.in/golibs/storage"
+	"git.eth4.dev/golibs/storage"
 )
 
 type pgQuery struct {
