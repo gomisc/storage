@@ -3,8 +3,8 @@ module git.eth4.dev/golibs/storage
 go 1.19
 
 require (
-	git.eth4.dev/golibs/errors v1.1.19
-	git.eth4.dev/golibs/tracing v1.0.3
+	git.eth4.dev/golibs/errors v1.2.1
+	git.eth4.dev/golibs/tracing v1.1.0
 	github.com/georgysavva/scany v1.2.0
 	github.com/jackc/pgconn v1.13.0
 	github.com/jackc/pgtype v1.12.0
@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	git.eth4.dev/golibs/fields v1.0.6 // indirect
+	git.eth4.dev/golibs/fields v1.1.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
