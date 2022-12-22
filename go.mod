@@ -1,6 +1,6 @@
 module git.eth4.dev/golibs/storage
 
-go 1.19
+go 1.18
 
 require (
 	git.eth4.dev/golibs/errors v1.2.1
