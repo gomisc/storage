@@ -48,6 +48,8 @@ func New(ctx context.Context, dsn string) (storage.Storage, error) {
 		return nil, errCtx.Wrap(err, "parse dsn")
 	}
 
+	poolConfig.ConnConfig.PreferSimpleProtocol = true
+
 	var pool *pgxpool.Pool
 
 	pool, err = pgxpool.ConnectConfig(ctx, poolConfig)
