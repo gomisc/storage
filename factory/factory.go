@@ -2,6 +2,7 @@ package factory
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strings"
 	"sync"
@@ -9,6 +10,7 @@ import (
 	"git.eth4.dev/golibs/errors"
 
 	"git.eth4.dev/golibs/storage"
+	"git.eth4.dev/golibs/storage/mysql"
 	"git.eth4.dev/golibs/storage/pg"
 )
 
@@ -82,6 +84,19 @@ func (f *driversFactory) create(dsn string) (storage.Storage, error) {
 		driver, err = pg.New(f.ctx, uri.String())
 		if err != nil {
 			return nil, errCtx.Wrap(err, "create postgres connection")
+		}
+	case mysql.DefaultScheme:
+		paswd, _ := uri.User.Password()
+
+		driver, err = mysql.New(f.ctx, fmt.Sprintf("%s:%s@tcp(%s)/%s?%s",
+			uri.User.Username(),
+			paswd,
+			uri.Host,
+			uri.Path,
+			uri.RawQuery,
+		))
+		if err != nil {
+			return nil, errCtx.Wrap(err, "create mysql connection")
 		}
 	default:
 		return nil, errUnsupportedDriver
