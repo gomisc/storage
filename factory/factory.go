@@ -63,16 +63,15 @@ func (f *driversFactory) get(dsn string) (storage.Storage, bool) {
 }
 
 func (f *driversFactory) create(dsn string) (storage.Storage, error) {
-	errCtx := errors.Ctx().Str("dsn", dsn)
-
 	uri, err := url.Parse(dsn)
 	if err != nil {
-		return nil, errCtx.Wrap(err, "parse dsn")
+		return nil, errors.Wrap(err, "parse dsn")
 	}
 
+	errCtx := errors.Ctx().Str("uri", uri.Redacted())
 	parts := strings.Split(uri.Path, "/")
 	if len(parts) == 0 {
-		return nil, errors.Ctx().Stringer("uri", uri).Just(errDatabaseName)
+		return nil, errCtx.Just(errDatabaseName)
 	}
 
 	var driver storage.Storage

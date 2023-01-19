@@ -41,11 +41,9 @@ type (
 )
 
 func New(ctx context.Context, dsn string) (storage.Storage, error) {
-	errCtx := errors.Ctx().Str("dsn", dsn)
-
 	poolConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
-		return nil, errCtx.Wrap(err, "parse dsn")
+		return nil, errors.Wrap(err, "configure database client")
 	}
 
 	poolConfig.ConnConfig.PreferSimpleProtocol = true
@@ -54,7 +52,7 @@ func New(ctx context.Context, dsn string) (storage.Storage, error) {
 
 	pool, err = pgxpool.ConnectConfig(ctx, poolConfig)
 	if err != nil {
-		return nil, errors.Ctx().Str("dsn", dsn).Wrap(err, "connect to postgresql database")
+		return nil, errors.Wrap(err, "connect to postgresql database")
 	}
 
 	return &databaseClient{pool: pool}, nil
