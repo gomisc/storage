@@ -42,9 +42,7 @@ func (f *driversFactory) Storage(dsn string) (storage.Storage, error) {
 
 	driver, err := f.create(dsn)
 	if err != nil {
-		return nil, errors.Ctx().
-			Str("dsn", dsn).
-			Wrap(err, "create client connection")
+		return nil, errors.Wrap(err, "create client connection")
 	}
 
 	return driver, nil
