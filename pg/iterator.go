@@ -6,7 +6,7 @@ import (
 	"github.com/georgysavva/scany/pgxscan"
 	"github.com/jackc/pgx/v4"
 
-	"git.eth4.dev/golibs/storage"
+	"gopkg.in/gomisc/storage.v1"
 )
 
 var _ storage.Iterator = (*postgresIterator)(nil)

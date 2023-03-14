@@ -3,9 +3,9 @@ package mysql
 import (
 	"context"
 
-	"git.eth4.dev/golibs/errors"
 	"github.com/georgysavva/scany/sqlscan"
 	"github.com/jmoiron/sqlx"
+	"gopkg.in/gomisc/errors.v1"
 )
 
 type sqlIterator struct {

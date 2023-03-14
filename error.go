@@ -1,10 +1,9 @@
 package storage
 
 import (
-	"git.eth4.dev/golibs/errors"
+	"gopkg.in/gomisc/errors.v1"
 )
 
 const (
 	ErrEmptyResult = errors.Const("empty query result")
 )
-

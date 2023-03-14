@@ -4,15 +4,14 @@ import (
 	"context"
 	"database/sql"
 
-	"git.eth4.dev/golibs/errors"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgtype/pgxtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"gopkg.in/gomisc/errors.v1"
+	"gopkg.in/gomisc/tracing.v1"
 
-	"git.eth4.dev/golibs/tracing"
-
-	"git.eth4.dev/golibs/storage"
+	"gopkg.in/gomisc/storage.v1"
 )
 
 // DSN schemes

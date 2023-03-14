@@ -4,13 +4,13 @@ import (
 	"context"
 	"database/sql"
 
-	"git.eth4.dev/golibs/errors"
-	"git.eth4.dev/golibs/tracing"
 	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"gopkg.in/gomisc/errors.v1"
+	"gopkg.in/gomisc/tracing.v1"
 
-	"git.eth4.dev/golibs/storage"
+	"gopkg.in/gomisc/storage.v1"
 )
 
 const (

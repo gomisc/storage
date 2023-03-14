@@ -3,8 +3,8 @@ package pg
 import (
 	"context"
 
-	"git.eth4.dev/golibs/errors"
 	"github.com/jackc/pgx/v4"
+	"gopkg.in/gomisc/errors.v1"
 )
 
 type transactionKey struct{}

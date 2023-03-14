@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 
-	"git.eth4.dev/golibs/errors"
-	"git.eth4.dev/golibs/tracing"
 	"github.com/jmoiron/sqlx"
+	"gopkg.in/gomisc/errors.v1"
+	"gopkg.in/gomisc/tracing.v1"
 )
 
 type (

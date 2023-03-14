@@ -7,11 +7,11 @@ import (
 	"strings"
 	"sync"
 
-	"git.eth4.dev/golibs/errors"
+	"gopkg.in/gomisc/errors.v1"
 
-	"git.eth4.dev/golibs/storage"
-	"git.eth4.dev/golibs/storage/mysql"
-	"git.eth4.dev/golibs/storage/pg"
+	"gopkg.in/gomisc/storage.v1"
+	"gopkg.in/gomisc/storage.v1/mysql"
+	"gopkg.in/gomisc/storage.v1/pg"
 )
 
 const (

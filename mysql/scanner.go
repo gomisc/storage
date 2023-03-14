@@ -3,11 +3,11 @@ package mysql
 import (
 	"reflect"
 
-	"git.eth4.dev/golibs/errors"
 	"github.com/georgysavva/scany/sqlscan"
 	"github.com/jmoiron/sqlx"
+	"gopkg.in/gomisc/errors.v1"
 
-	"git.eth4.dev/golibs/storage"
+	"gopkg.in/gomisc/storage.v1"
 )
 
 type customScanner struct {
